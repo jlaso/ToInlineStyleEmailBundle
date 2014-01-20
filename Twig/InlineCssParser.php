@@ -48,15 +48,32 @@ class InlineCssParser extends \Twig_TokenParser
      */
     public function parse(Twig_Token $token)
     {
-        $lineNo = $token->getLine();
-        $stream = $this->parser->getStream(); 
-        $path = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
+        $lineNo     = $token->getLine();
+        $stream     = $this->parser->getStream();
+        $path       = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
+        $parameters = array();
+        if ( $stream->test( \Twig_Token::NAME_TYPE, 'with' ) )
+        {
+            $stream->test(Twig_Token::PUNCTUATION_TYPE, '{');
+            $stream->next();
+            do{
+                $stream->next();
+                $index = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
+                $stream->test(Twig_Token::PUNCTUATION_TYPE, ':');
+                $stream->next();
+                $value = $this->parser->getExpressionParser()->parseExpression();
+                $parameters[$index] = $value;
+                if (! $stream->test(Twig_Token::PUNCTUATION_TYPE, ',')) {
+                    break;
+                }
+            }while(!$stream->test( \Twig_Token::BLOCK_END_TYPE, '}'));
+            $stream->next();
+        }
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse(array($this, 'decideEnd'), true);
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
-        
-        
-        return new InlineCssNode($body, $this->resolvePath($path), $lineNo, $this->debug); 
+
+        return new InlineCssNode($body, $this->resolvePath($path), $parameters, $lineNo, $this->debug);
     }
 
     /**
