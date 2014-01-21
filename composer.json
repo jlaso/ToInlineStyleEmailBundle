@@ -29,9 +29,9 @@
         "symfony/framework-bundle": ">=2.1,<2.2-dev"
     },
     "autoload": {
-        "psr-0": { "JLaso\\ToInlineStyleEmailBundle": "" }
+        "psr-0": { "RobertoTru\\ToInlineStyleEmailBundle": "" }
     },
-    "target-dir": "JLaso/ToInlineStyleEmailBundle",
+    "target-dir": "RobertoTru/ToInlineStyleEmailBundle",
     "extra": {
             "branch-alias": {
                 "dev-master": "1.0.0-dev"
