@@ -28,9 +28,9 @@ class InlineCssNode extends \Twig_Node
                 \$result = file_get_contents(\$base);
                 \$css = explode(".css", \$base);
                 \$css = \$css[0] . "-" . \$locale . ".css";
-                //if(file_exists(\$css)){
+                if(file_exists(\$css)){
                     \$result .= PHP_EOL . file_get_contents(\$css);
-                //}
+                }
 
             return '"' . addslashes(\$result) . '"';
         };

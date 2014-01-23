@@ -205,10 +205,14 @@ class ToInlineStyleEmailConverter {
      */
     public function inlineCSS($html, $css, $outputXHTML = false)
     {
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
         $this->cssToInlineStyles->setHTML($html);
         $this->cssToInlineStyles->setCSS($css);
-        
-        return $this->cssToInlineStyles->convert($outputXHTML);
+
+        $result = $this->cssToInlineStyles->convert($outputXHTML);
+        $result = mb_convert_encoding($result, 'UTF-8', 'HTML-ENTITIES');
+
+        return $result;
     }
 }
 
